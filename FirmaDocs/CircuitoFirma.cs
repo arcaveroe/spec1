@@ -112,7 +112,7 @@ public sealed class CircuitoFirma
     public void Reenviar(string solicitanteId)
     {
         if (Estado != EstadoDocumento.Devuelto)
-            throw new CircuitoFirmaException("El documento no está devuelto.");
+            throw new CircuitoFirmaException("Solo se puede reenviar un documento devuelto.");
         if (solicitanteId != AutorId)
             throw new CircuitoFirmaException("Solo el autor puede reenviar el documento.");
 

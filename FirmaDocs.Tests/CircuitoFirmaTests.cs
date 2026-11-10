@@ -90,6 +90,29 @@ public class CircuitoFirmaTests
     }
 
     [Fact]
+    public void Reenviar_FueraDeDevuelto_LanzaExcepcionConMensaje_RF02()
+    {
+        var circuito = new CircuitoFirma("DOC-001", "marta", [Ana, Luis]);
+
+        var ex = Assert.Throws<CircuitoFirmaException>(() => circuito.Reenviar("marta"));
+
+        Assert.Equal("Solo se puede reenviar un documento devuelto.", ex.Message);
+        Assert.Equal(EstadoDocumento.Borrador, circuito.Estado);
+        Assert.Equal(1, circuito.Version);
+    }
+
+    [Fact]
+    public void Reenviar_Devuelto_ConservaFirmantesYOrden_RF02()
+    {
+        var circuito = CircuitoEnviado();
+        circuito.Rechazar(Ana, "Corregir el documento.", Ahora);
+
+        circuito.Reenviar("marta");
+
+        Assert.Equal([Ana, Luis], circuito.Firmantes);
+    }
+
+    [Fact]
     public void Constructor_FirmanteRepetido_LanzaExcepcion()
     {
         var ex = Assert.Throws<CircuitoFirmaException>(() => new CircuitoFirma("DOC-001", "marta", [Ana, Ana]));

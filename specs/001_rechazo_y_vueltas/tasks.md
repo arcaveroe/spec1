@@ -1,6 +1,6 @@
 - [x] T1 (RF-04) Acordar si la versión inicial es la vuelta 1 y confirmar el cierre al rechazar en la tercera vuelta · 25 min
 - [x] T2 (RF-01) Definir el error para rechazar fuera de `EnCircuito` y acordar si las operaciones concurrentes quedan fuera del alcance · 25 min
-- [ ] T3 (RF-02) Definir el error para reenviar fuera de `Devuelto` y confirmar que se conserva el circuito y orden de firmantes · 25 min
+- [x] T3 (RF-02) Definir el error para reenviar fuera de `Devuelto` y confirmar que se conserva el circuito y orden de firmantes · 25 min
 - [ ] T4 (RF-01) Añadir primero pruebas para registrar firmante, motivo, versión e instante del rechazo válido y comprobar el estado devuelto · 25 min
 - [ ] T5 (RF-02) Añadir primero pruebas para reenvío autorizado, incremento de versión, turno inicial y rechazo al solicitante no autor · 25 min
 - [ ] T6 (RF-03) Añadir primero pruebas que conserven firmas previas y comprueben que no cuentan en el turno ni aprobación de la versión vigente · 25 min
