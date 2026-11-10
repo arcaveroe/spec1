@@ -96,7 +96,7 @@ public sealed class CircuitoFirma
         ArgumentNullException.ThrowIfNull(firmante);
 
         if (Estado != EstadoDocumento.EnCircuito)
-            throw new CircuitoFirmaException("El documento no está en circuito de firma.");
+            throw new CircuitoFirmaException("Solo se puede rechazar un documento en circuito de firma.");
         if (FirmanteEnTurno!.Id != firmante.Id)
             throw new CircuitoFirmaException($"No es el turno de {firmante.Nombre}.");
         if (string.IsNullOrWhiteSpace(motivo))

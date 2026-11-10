@@ -59,6 +59,19 @@ public class CircuitoFirmaTests
     }
 
     [Fact]
+    public void Rechazar_SinEnviar_LanzaExcepcionConMensaje_RF01()
+    {
+        var circuito = new CircuitoFirma("DOC-001", "marta", [Ana, Luis]);
+
+        var ex = Assert.Throws<CircuitoFirmaException>(() =>
+            circuito.Rechazar(Ana, "Corregir el documento.", Ahora));
+
+        Assert.Equal("Solo se puede rechazar un documento en circuito de firma.", ex.Message);
+        Assert.Equal(EstadoDocumento.Borrador, circuito.Estado);
+        Assert.Empty(circuito.Rechazos);
+    }
+
+    [Fact]
     public void Rechazar_TerceraVuelta_CierraDocumentoYNoAdmiteReenvio_RF04()
     {
         var circuito = CircuitoEnviado();

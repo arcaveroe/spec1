@@ -24,8 +24,8 @@ La funcionalidad permitirá que el firmante en turno devuelva el documento con u
 - Reenvío por alguien distinto de `AutorId` → lanzar la excepción de RF-02; no incrementar la versión ni cambiar el estado.
 - Rechazo en la tercera vuelta → cambiar a `Rechazado`; no admitir reenvíos posteriores.
 - Firmas de versiones anteriores → mantenerlas en el historial sin contarlas para aprobar la versión vigente.
-- Rechazo cuando el documento no está `EnCircuito` o reenvío cuando no está `Devuelto` → comportamiento y mensaje pendientes de definición.
-- Rechazo y aprobación concurrentes, o reenvío concurrente con otra operación → política pendiente de definición.
+- Rechazo cuando el documento no está `EnCircuito` → lanzar `CircuitoFirmaException` con el mensaje `Solo se puede rechazar un documento en circuito de firma.`; no registrar el rechazo ni cambiar el estado.
+- Rechazo y aprobación concurrentes, o reenvío concurrente con otra operación → quedan fuera del alcance; no se garantiza seguridad ni atomicidad entre hilos.
 
 ## 5. Criterios de finalización
 - CF-01 · `dotnet test` termina en verde.
@@ -37,6 +37,5 @@ La funcionalidad permitirá que el firmante en turno devuelva el documento con u
 - ¿La vuelta inicial corresponde a la versión 1 y cada reenvío incrementa tanto la versión como el número de vuelta?
 - ¿Se conserva el mismo circuito y orden de firmantes en cada reenvío? ¿Deben todos aprobar de nuevo la versión reenviada?
 - ¿Cómo se consulta y ordena el historial de rechazos? RF-01 define los datos que se registran, pero no su representación pública.
-- ¿Qué error y mensaje corresponden al rechazo cuando el documento no está `EnCircuito`, o al reenvío cuando no está `Devuelto`?
-- ¿Qué política se aplica si coinciden operaciones concurrentes, por ejemplo, aprobar y rechazar a la vez?
+- ¿Qué error y mensaje corresponden al reenvío cuando no está `Devuelto`?
 - El contenido del documento no está modelado actualmente; queda por definir cómo comprobar que cambió antes del reenvío.

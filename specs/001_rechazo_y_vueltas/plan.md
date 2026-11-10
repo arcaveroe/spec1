@@ -43,12 +43,12 @@ Así, las firmas de versiones anteriores permanecen intactas y consultables, per
 - **Confundir versión con vuelta:** podría cerrar el documento en un momento distinto al esperado. Confirmar antes de implementar que la versión inicial es la vuelta 1 y que cada reenvío consume una vuelta.
 - **Regresiones en el orden o cierre de aprobaciones:** filtrar solo el turno, pero dejar el total histórico en la condición de aprobación, causaría un cierre prematuro. Usar el mismo conteo por versión para turno y finalización; añadir pruebas de reenvío con firmas previas.
 - **Mutaciones ante errores:** un motivo inválido, un firmante fuera de turno o un solicitante que no sea el autor no debe alterar estado, versión ni historiales. Validar todas las precondiciones antes de agregar un rechazo o incrementar la versión, y comprobarlo en pruebas.
-- **Comportamiento no especificado para estados inválidos y concurrencia:** la spec deja pendientes el mensaje al rechazar fuera de `EnCircuito`, el mensaje al reenviar fuera de `Devuelto` y la política para operaciones concurrentes. Acordar los mensajes y documentar si la concurrencia queda fuera del alcance antes de escribir las pruebas correspondientes; no introducir una política implícita.
+- **Estados inválidos y concurrencia:** rechazar fuera de `EnCircuito` lanza `CircuitoFirmaException` con el mensaje `Solo se puede rechazar un documento en circuito de firma.`. Las operaciones concurrentes quedan fuera del alcance; no se garantiza seguridad ni atomicidad entre hilos. El mensaje al reenviar fuera de `Devuelto` sigue pendiente.
 - **Cambios de compatibilidad:** no modificar firmas públicas existentes ni añadir paquetes. Verificarlo con compilación y la suite existente sin alterar pruebas previas.
 
 ## 6. Orden de implementación
 
-1. Aprobar este plan y resolver las preguntas abiertas de la spec que afecten el contrato: versión/vuelta, conservación del circuito, estados inválidos y concurrencia.
+1. Aprobar este plan y resolver las preguntas abiertas restantes de la spec que afecten el contrato: versión/vuelta, conservación del circuito, comportamiento del reenvío en estados inválidos y contenido del documento.
 2. Añadir primero pruebas fallidas para RF-01 a RF-06, incluidos los casos de error y las firmas previas; conservar intactas las pruebas existentes.
 3. Añadir el record `Rechazo` y los estados `Devuelto` y `Rechazado`, con XML docs en español.
 4. Implementar `Rechazar`: validar estado, turno y motivo; registrar firmante, motivo, versión e instante; devolver el documento, salvo al alcanzar la tercera vuelta, cuando quedará `Rechazado`.
