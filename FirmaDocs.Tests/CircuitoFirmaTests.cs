@@ -59,6 +59,24 @@ public class CircuitoFirmaTests
     }
 
     [Fact]
+    public void Rechazar_TerceraVuelta_CierraDocumentoYNoAdmiteReenvio_RF04()
+    {
+        var circuito = CircuitoEnviado();
+
+        Assert.Equal(1, circuito.Version);
+
+        circuito.Rechazar(Ana, "Corregir el documento.", Ahora);
+        circuito.Reenviar("marta");
+        circuito.Rechazar(Ana, "Aún requiere cambios.", Ahora.AddDays(1));
+        circuito.Reenviar("marta");
+        circuito.Rechazar(Ana, "No cumple los requisitos.", Ahora.AddDays(2));
+
+        Assert.Equal(3, circuito.Version);
+        Assert.Equal(EstadoDocumento.Rechazado, circuito.Estado);
+        Assert.Throws<CircuitoFirmaException>(() => circuito.Reenviar("marta"));
+    }
+
+    [Fact]
     public void Constructor_FirmanteRepetido_LanzaExcepcion()
     {
         var ex = Assert.Throws<CircuitoFirmaException>(() => new CircuitoFirma("DOC-001", "marta", [Ana, Ana]));

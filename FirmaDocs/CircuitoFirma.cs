@@ -8,6 +8,8 @@ public sealed class CircuitoFirma
 {
     private readonly List<Firmante> _firmantes;
     private readonly List<Firma> _firmas = [];
+    private readonly List<Rechazo> _rechazos = [];
+    private const int MaxVueltas = 3;
 
     /// <summary>Crea el circuito de un documento en estado <see cref="EstadoDocumento.Borrador"/>.</summary>
     /// <param name="documentoId">Identificador del documento.</param>
@@ -48,6 +50,9 @@ public sealed class CircuitoFirma
     /// <summary>Historial de aprobaciones, en orden cronológico.</summary>
     public IReadOnlyList<Firma> Firmas => _firmas;
 
+    /// <summary>Historial de rechazos, en orden cronológico.</summary>
+    public IReadOnlyList<Rechazo> Rechazos => _rechazos;
+
     /// <summary>Firmante que debe aprobar ahora; <c>null</c> si el documento no está en circuito.</summary>
     public Firmante? FirmanteEnTurno =>
         Estado == EstadoDocumento.EnCircuito ? _firmantes[_firmas.Count] : null;
@@ -79,5 +84,39 @@ public sealed class CircuitoFirma
 
         if (_firmas.Count == _firmantes.Count)
             Estado = EstadoDocumento.Aprobado;
+    }
+
+    /// <summary>Registra el rechazo del firmante en turno.</summary>
+    /// <param name="firmante">Firmante que rechaza.</param>
+    /// <param name="motivo">Motivo del rechazo.</param>
+    /// <param name="instante">Momento del rechazo.</param>
+    /// <exception cref="CircuitoFirmaException">El documento no está en circuito, el firmante no está en turno o el motivo está vacío.</exception>
+    public void Rechazar(Firmante firmante, string motivo, DateTimeOffset instante)
+    {
+        ArgumentNullException.ThrowIfNull(firmante);
+
+        if (Estado != EstadoDocumento.EnCircuito)
+            throw new CircuitoFirmaException("El documento no está en circuito de firma.");
+        if (FirmanteEnTurno!.Id != firmante.Id)
+            throw new CircuitoFirmaException($"No es el turno de {firmante.Nombre}.");
+        if (string.IsNullOrWhiteSpace(motivo))
+            throw new CircuitoFirmaException("El motivo de rechazo es obligatorio.");
+
+        _rechazos.Add(new Rechazo(firmante, motivo, Version, instante));
+        Estado = Version == MaxVueltas ? EstadoDocumento.Rechazado : EstadoDocumento.Devuelto;
+    }
+
+    /// <summary>Reenvía al circuito un documento devuelto por su autor.</summary>
+    /// <param name="solicitanteId">Identificador de quien solicita el reenvío.</param>
+    /// <exception cref="CircuitoFirmaException">El solicitante no es el autor o el documento no está devuelto.</exception>
+    public void Reenviar(string solicitanteId)
+    {
+        if (Estado != EstadoDocumento.Devuelto)
+            throw new CircuitoFirmaException("El documento no está devuelto.");
+        if (solicitanteId != AutorId)
+            throw new CircuitoFirmaException("Solo el autor puede reenviar el documento.");
+
+        Version++;
+        Estado = EstadoDocumento.EnCircuito;
     }
 }
