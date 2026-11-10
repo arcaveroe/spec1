@@ -1,0 +1,21 @@
+- [ ] T1 (RF-04) Acordar si la versión inicial es la vuelta 1 y confirmar el cierre al rechazar en la tercera vuelta · 25 min
+- [ ] T2 (RF-01) Definir el error para rechazar fuera de `EnCircuito` y acordar si las operaciones concurrentes quedan fuera del alcance · 25 min
+- [ ] T3 (RF-02) Definir el error para reenviar fuera de `Devuelto` y confirmar que se conserva el circuito y orden de firmantes · 25 min
+- [ ] T4 (RF-01) Añadir primero pruebas para registrar firmante, motivo, versión e instante del rechazo válido y comprobar el estado devuelto · 25 min
+- [ ] T5 (RF-02) Añadir primero pruebas para reenvío autorizado, incremento de versión, turno inicial y rechazo al solicitante no autor · 25 min
+- [ ] T6 (RF-03) Añadir primero pruebas que conserven firmas previas y comprueben que no cuentan en el turno ni aprobación de la versión vigente · 25 min
+- [ ] T7 (RF-04) Añadir primero pruebas del rechazo en la tercera vuelta, estado terminal y ausencia de reenvíos posteriores · 25 min
+- [ ] T8 (RF-05) Añadir primero pruebas para motivos vacíos o compuestos solo por espacios y verificar que no haya mutaciones · 20 min
+- [ ] T9 (RF-06) Añadir primero pruebas de rechazo fuera de turno con el mismo mensaje de aprobación y sin mutaciones · 20 min
+- [ ] T10 (RF-01) Crear el record `Rechazo`, su historial público y el estado `Devuelto` · 25 min
+- [ ] T11 (RF-04) Añadir el estado `Rechazado` y la regla interna del máximo de tres vueltas · 20 min
+- [ ] T12 (RF-01) Implementar el rechazo válido, registrando sus datos inmutables y pasando a `Devuelto` · 25 min
+- [ ] T13 (RF-05) Validar el motivo antes de mutar el estado o el historial y lanzar el mensaje especificado · 20 min
+- [ ] T14 (RF-06) Validar el firmante en turno y reutilizar el mensaje de error existente para quien está fuera de turno · 20 min
+- [ ] T15 (RF-04) Cerrar como `Rechazado` al alcanzar la tercera vuelta y asegurar que no admita reenvíos · 25 min
+- [ ] T16 (RF-02) Implementar el reenvío con validación de autor, incremento de versión y retorno a `EnCircuito` en el primer turno · 25 min
+- [ ] T17 (RF-03) Ajustar el turno y el cierre de aprobación para contar solo firmas de la versión vigente, preservando el historial · 25 min
+- [ ] T18 (CF-04) Revisar y completar la documentación XML en español de todos los miembros públicos nuevos · 20 min
+- [ ] T19 (CF-03) Comprobar que el constructor, `Enviar` y `Aprobar` conservan sus firmas públicas existentes · 20 min
+- [ ] T20 (CF-02) Verificar que cada requisito tenga al menos una prueba con su identificador al final del nombre · 20 min
+- [ ] T21 (CF-01) Ejecutar `dotnet build` y `dotnet test`, y corregir cualquier fallo en el código · 30 min
