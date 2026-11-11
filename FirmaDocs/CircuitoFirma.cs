@@ -142,18 +142,18 @@ public sealed class CircuitoFirma
             Estado = EstadoDocumento.Aprobado;
     }
 
-    /// <summary>Registra el rechazo del firmante en turno.</summary>
+    /// <summary>Registra el rechazo de un firmante habilitado.</summary>
     /// <param name="firmante">Firmante que rechaza.</param>
     /// <param name="motivo">Motivo del rechazo.</param>
     /// <param name="instante">Momento del rechazo.</param>
-    /// <exception cref="CircuitoFirmaException">El documento no está en circuito, el firmante no está en turno o el motivo está vacío.</exception>
+    /// <exception cref="CircuitoFirmaException">El documento no está en circuito, el firmante no está habilitado o el motivo está vacío.</exception>
     public void Rechazar(Firmante firmante, string motivo, DateTimeOffset instante)
     {
         ArgumentNullException.ThrowIfNull(firmante);
 
         if (Estado != EstadoDocumento.EnCircuito)
             throw new CircuitoFirmaException("Solo se puede rechazar un documento en circuito de firma.");
-        if (FirmanteEnTurno!.Id != firmante.Id)
+        if (!FirmantesHabilitados.Any(habilitado => habilitado.Id == firmante.Id))
             throw new CircuitoFirmaException($"No es el turno de {firmante.Nombre}.");
         if (string.IsNullOrWhiteSpace(motivo))
             throw new CircuitoFirmaException("El motivo de rechazo es obligatorio.");
