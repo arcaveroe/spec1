@@ -17,7 +17,7 @@
 - [x] 3.1 Añadir pruebas de rechazo por firmante habilitado desde distintas etapas, reenvío desde la primera etapa y límite de tres vueltas (RF-07).
 - [x] 3.2 Adaptar rechazo y reenvío para usar los firmantes habilitados de la etapa actual, conservar la configuración y reiniciar el avance en la nueva versión (RF-07).
 - [x] 3.3 Añadir pruebas que comprueben que las firmas anteriores se conservan y no completan etapas de la versión vigente (RF-08).
-- [ ] 3.4 Asegurar que el cálculo de avance solo cuenta firmas de la versión vigente sin modificar el historial registrado (RF-08).
+- [x] 3.4 Asegurar que el cálculo de avance solo cuenta firmas de la versión vigente sin modificar el historial registrado (RF-08).
 
 ## 4. Regresión
 

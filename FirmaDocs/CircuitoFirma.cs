@@ -83,7 +83,7 @@ public sealed class CircuitoFirma
     public IReadOnlyList<EtapaFirma> Etapas => _etapas;
 
     /// <summary>Historial de aprobaciones, en orden cronológico.</summary>
-    public IReadOnlyList<Firma> Firmas => _firmas;
+    public IReadOnlyList<Firma> Firmas => _firmas.AsReadOnly();
 
     /// <summary>Historial de rechazos, en orden cronológico.</summary>
     public IReadOnlyList<Rechazo> Rechazos => _rechazos;
