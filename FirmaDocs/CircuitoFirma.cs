@@ -88,9 +88,30 @@ public sealed class CircuitoFirma
     /// <summary>Historial de rechazos, en orden cronológico.</summary>
     public IReadOnlyList<Rechazo> Rechazos => _rechazos;
 
-    /// <summary>Firmante que debe aprobar ahora; <c>null</c> si el documento no está en circuito.</summary>
+    /// <summary>Firmantes que pueden aprobar en la etapa vigente.</summary>
+    public IReadOnlyList<Firmante> FirmantesHabilitados
+    {
+        get
+        {
+            if (Estado != EstadoDocumento.EnCircuito || EtapaActual is not { } etapa)
+                return Array.Empty<Firmante>();
+
+            var aprobados = FirmantesAprobadosEnVersionVigente();
+            var pendientes = etapa.Firmantes
+                .Where(firmante => !aprobados.Contains(firmante.Id))
+                .ToArray();
+
+            return etapa.Modo == ModoEtapaFirma.Secuencial
+                ? Array.AsReadOnly(new[] { pendientes[0] })
+                : Array.AsReadOnly(pendientes);
+        }
+    }
+
+    /// <summary>Firmante que debe aprobar ahora; <c>null</c> si no existe un turno secuencial único.</summary>
     public Firmante? FirmanteEnTurno =>
-        Estado == EstadoDocumento.EnCircuito ? _firmantes[_firmas.Count] : null;
+        Estado == EstadoDocumento.EnCircuito && EtapaActual is { Modo: ModoEtapaFirma.Secuencial }
+            ? FirmantesHabilitados[0]
+            : null;
 
     /// <summary>Envía el documento a firma.</summary>
     /// <exception cref="CircuitoFirmaException">El documento no está en borrador.</exception>
@@ -102,22 +123,22 @@ public sealed class CircuitoFirma
         Estado = EstadoDocumento.EnCircuito;
     }
 
-    /// <summary>Registra la aprobación del firmante en turno.</summary>
+    /// <summary>Registra la aprobación de un firmante habilitado.</summary>
     /// <param name="firmante">Firmante que aprueba.</param>
     /// <param name="instante">Momento de la aprobación.</param>
-    /// <exception cref="CircuitoFirmaException">El documento no está en circuito o no es el turno del firmante.</exception>
+    /// <exception cref="CircuitoFirmaException">El documento no está en circuito o el firmante no está habilitado.</exception>
     public void Aprobar(Firmante firmante, DateTimeOffset instante)
     {
         ArgumentNullException.ThrowIfNull(firmante);
 
         if (Estado != EstadoDocumento.EnCircuito)
             throw new CircuitoFirmaException("El documento no está en circuito de firma.");
-        if (FirmanteEnTurno!.Id != firmante.Id)
+        if (!FirmantesHabilitados.Any(habilitado => habilitado.Id == firmante.Id))
             throw new CircuitoFirmaException($"No es el turno de {firmante.Nombre}.");
 
         _firmas.Add(new Firma(firmante, Version, instante));
 
-        if (_firmas.Count == _firmantes.Count)
+        if (FirmantesHabilitados.Count == 0)
             Estado = EstadoDocumento.Aprobado;
     }
 
@@ -154,4 +175,20 @@ public sealed class CircuitoFirma
         Version++;
         Estado = EstadoDocumento.EnCircuito;
     }
+
+    private EtapaFirma? EtapaActual
+    {
+        get
+        {
+            var aprobados = FirmantesAprobadosEnVersionVigente();
+            return _etapas.FirstOrDefault(etapa =>
+                etapa.Firmantes.Any(firmante => !aprobados.Contains(firmante.Id)));
+        }
+    }
+
+    private HashSet<string> FirmantesAprobadosEnVersionVigente() =>
+        _firmas
+            .Where(firma => firma.Version == Version)
+            .Select(firma => firma.Firmante.Id)
+            .ToHashSet(StringComparer.Ordinal);
 }
