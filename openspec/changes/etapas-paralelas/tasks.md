@@ -21,4 +21,4 @@
 
 ## 4. Regresión
 
-- [ ] 4.1 Ejecutar las pruebas de la solución y corregir regresiones relacionadas con las aprobaciones secuenciales existentes y las reglas de rechazo y vueltas (RF-03, RF-07, RF-08).
+- [x] 4.1 Ejecutar las pruebas de la solución y corregir regresiones relacionadas con las aprobaciones secuenciales existentes y las reglas de rechazo y vueltas (RF-03, RF-07, RF-08).
