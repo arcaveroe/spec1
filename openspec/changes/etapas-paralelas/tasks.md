@@ -9,7 +9,7 @@
 
 - [x] 2.1 Añadir pruebas de orden secuencial y aprobación paralela en cualquier orden, verificando los firmantes habilitados (RF-04, RF-05).
 - [x] 2.2 Derivar los firmantes habilitados y el turno secuencial de las firmas de la versión vigente; validar `Aprobar` contra ese conjunto (RF-04, RF-05).
-- [ ] 2.3 Añadir pruebas de avance solo al completar una etapa y de aprobación del circuito al completar la última (RF-06).
+- [x] 2.3 Añadir pruebas de avance solo al completar una etapa y de aprobación del circuito al completar la última (RF-06).
 - [ ] 2.4 Implementar la transición derivada entre etapas y el estado aprobado al completar el circuito (RF-06).
 
 ## 3. Rechazo, reenvío e historial
