@@ -138,7 +138,7 @@ public sealed class CircuitoFirma
 
         _firmas.Add(new Firma(firmante, Version, instante));
 
-        if (FirmantesHabilitados.Count == 0)
+        if (EtapaActual is null)
             Estado = EstadoDocumento.Aprobado;
     }
 
