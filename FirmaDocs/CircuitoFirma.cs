@@ -16,7 +16,7 @@ public sealed class CircuitoFirma
     /// <param name="documentoId">Identificador del documento.</param>
     /// <param name="autorId">Identificador del autor del documento.</param>
     /// <param name="firmantes">Firmantes en orden de firma; al menos uno y sin repetidos.</param>
-    /// <exception cref="CircuitoFirmaException">No hay firmantes o hay repetidos.</exception>
+    /// <exception cref="CircuitoFirmaException">La cantidad de firmantes no está admitida o hay repetidos.</exception>
     public CircuitoFirma(string documentoId, string autorId, IReadOnlyList<Firmante> firmantes)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(documentoId);
@@ -55,6 +55,8 @@ public sealed class CircuitoFirma
 
         var copiaEtapas = etapas.ToArray();
         var copiaFirmantes = copiaEtapas.SelectMany(etapa => etapa.Firmantes).ToArray();
+        if (copiaFirmantes.Select(firmante => firmante.Id).Distinct().Count() != copiaFirmantes.Length)
+            throw new CircuitoFirmaException("Un firmante no puede repetirse en el circuito.");
 
         DocumentoId = documentoId;
         AutorId = autorId;
