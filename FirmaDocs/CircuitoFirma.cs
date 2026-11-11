@@ -6,7 +6,8 @@
 /// </summary>
 public sealed class CircuitoFirma
 {
-    private readonly List<Firmante> _firmantes;
+    private readonly IReadOnlyList<Firmante> _firmantes;
+    private readonly IReadOnlyList<EtapaFirma> _etapas;
     private readonly List<Firma> _firmas = [];
     private readonly List<Rechazo> _rechazos = [];
     private const int MaxVueltas = 3;
@@ -24,12 +25,41 @@ public sealed class CircuitoFirma
 
         if (firmantes.Count == 0)
             throw new CircuitoFirmaException("El circuito necesita al menos un firmante.");
+        if (firmantes.Any(firmante => firmante is null))
+            throw new CircuitoFirmaException("El circuito no puede contener firmantes nulos.");
         if (firmantes.Select(f => f.Id).Distinct().Count() != firmantes.Count)
             throw new CircuitoFirmaException("Un firmante no puede repetirse en el circuito.");
 
         DocumentoId = documentoId;
         AutorId = autorId;
-        _firmantes = [.. firmantes];
+        var copiaFirmantes = firmantes.ToArray();
+        _firmantes = Array.AsReadOnly(copiaFirmantes);
+        _etapas = Array.AsReadOnly(new[] { new EtapaFirma(ModoEtapaFirma.Secuencial, copiaFirmantes) });
+    }
+
+    /// <summary>Crea el circuito a partir de etapas secuenciales o paralelas.</summary>
+    /// <param name="documentoId">Identificador del documento.</param>
+    /// <param name="autorId">Identificador del autor del documento.</param>
+    /// <param name="etapas">Etapas del circuito en orden de aprobación.</param>
+    /// <exception cref="CircuitoFirmaException">La cantidad de etapas no está entre uno y cinco o hay firmantes repetidos.</exception>
+    public CircuitoFirma(string documentoId, string autorId, IReadOnlyList<EtapaFirma> etapas)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(documentoId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(autorId);
+        ArgumentNullException.ThrowIfNull(etapas);
+
+        if (etapas.Count is < 1 or > 5)
+            throw new CircuitoFirmaException("El circuito debe tener entre una y cinco etapas.");
+        if (etapas.Any(etapa => etapa is null))
+            throw new CircuitoFirmaException("El circuito no puede contener etapas nulas.");
+
+        var copiaEtapas = etapas.ToArray();
+        var copiaFirmantes = copiaEtapas.SelectMany(etapa => etapa.Firmantes).ToArray();
+
+        DocumentoId = documentoId;
+        AutorId = autorId;
+        _etapas = Array.AsReadOnly(copiaEtapas);
+        _firmantes = Array.AsReadOnly(copiaFirmantes);
     }
 
     /// <summary>Identificador del documento.</summary>
@@ -46,6 +76,9 @@ public sealed class CircuitoFirma
 
     /// <summary>Firmantes en orden de firma.</summary>
     public IReadOnlyList<Firmante> Firmantes => _firmantes;
+
+    /// <summary>Etapas de aprobación en el orden configurado.</summary>
+    public IReadOnlyList<EtapaFirma> Etapas => _etapas;
 
     /// <summary>Historial de aprobaciones, en orden cronológico.</summary>
     public IReadOnlyList<Firma> Firmas => _firmas;

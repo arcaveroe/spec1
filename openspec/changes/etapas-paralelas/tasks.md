@@ -1,7 +1,7 @@
 ## 1. Configuración de etapas
 
 - [x] 1.1 Añadir pruebas de aceptación y límites para cantidad de etapas, firmantes y modos, incluyendo la inmutabilidad de la configuración (RF-01).
-- [ ] 1.2 Implementar `ModoEtapaFirma`, `EtapaFirma` y la validación de configuración según los límites especificados (RF-01).
+- [x] 1.2 Implementar `ModoEtapaFirma`, `EtapaFirma` y la validación de configuración según los límites especificados (RF-01).
 - [ ] 1.3 Añadir pruebas para firmantes duplicados entre etapas y para la compatibilidad del constructor de lista plana, incluido el límite máximo (RF-02, RF-03).
 - [ ] 1.4 Implementar la configuración por etapas, la validación de unicidad global y la adaptación de la lista plana como una etapa secuencial (RF-02, RF-03).
 
