@@ -4,9 +4,6 @@ namespace FirmaDocs.Legado;
 // solicitud y se resuelve, agrupado por mes de creación ("yyyy-MM").
 public class ReporteSla
 {
-    // ESPERANDO_CERTIFICADO no cuenta: el reloj no corre hasta tener certificado.
-    private static readonly string[] EstadosQueCuentan = { "PENDIENTE", "FIRMADA", "RECHAZADA", "EXPIRADA" };
-
     private readonly SolicitudFirmaRepository _repo;
 
     public ReporteSla(SolicitudFirmaRepository repo)
@@ -21,10 +18,6 @@ public class ReporteSla
 
         foreach (var s in _repo.Listar())
         {
-            var texto = EstadoSolicitudTexto.ATexto(s.Estado);
-            if (!EstadosQueCuentan.Contains(texto))
-                continue;
-
             var mes = s.CreadaEn.ToString("yyyy-MM");
             if (!horas.ContainsKey(mes))
             {
