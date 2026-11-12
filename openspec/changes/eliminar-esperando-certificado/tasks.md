@@ -7,7 +7,7 @@
 ## 2. Estado y consumidores
 
 - [x] 2.1 Retirar `EsperandoCertificado` de `EstadoSolicitud` y sus conversiones, sin cambiar firmas públicas ni afectar los demás estados (RF-02).
-- [ ] 2.2 Actualizar `BandejaFirmante` y su prueba de caracterización para clasificar solicitudes migradas en `PorFirmar`, no en una categoría de espera (RF-09).
+- [x] 2.2 Actualizar `BandejaFirmante` y su prueba de caracterización para clasificar solicitudes migradas en `PorFirmar`, no en una categoría de espera (RF-09).
 - [ ] 2.3 Actualizar `RecordatorioService` y su prueba de caracterización para no enviar el aviso de instalación del certificado y mantener el recordatorio normal de pendientes (RF-10).
 - [ ] 2.4 Actualizar `ReporteSla` y su prueba de caracterización para incluir solicitudes migradas desde su fecha original de creación (RF-11).
 
