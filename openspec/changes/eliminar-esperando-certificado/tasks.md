@@ -13,4 +13,4 @@
 
 ## 3. Regresión
 
-- [ ] 3.1 Ejecutar `dotnet test` y corregir cualquier regresión relacionada con la retirada del estado y sus consumidores (RF-02, RF-08, RF-09, RF-10, RF-11).
+- [x] 3.1 Ejecutar `dotnet test` y corregir cualquier regresión relacionada con la retirada del estado y sus consumidores (RF-02, RF-08, RF-09, RF-10, RF-11).
