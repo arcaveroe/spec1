@@ -15,3 +15,6 @@
 - No cambiar firmas públicas existentes. No tocar `Program.cs` salvo que la tarea lo pida.
 - No modificar tests existentes para que pasen: si un test falla, corrige el código o pregunta.
 - Las specs viven en `specs/<nnn>_<feature>/`; toda tarea cita el RF que cubre.
+
+
+- Excepción: tests de caracterización de código legado → `Caracterizacion_<Clase>_<Escenario>` en `FirmaDocs.Tests/Legado/`, sin id de RF. Fijan el comportamiento actual.
