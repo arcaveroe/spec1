@@ -5,6 +5,29 @@ namespace FirmaDocs.Tests.Legado;
 public class MigracionEstadoSolicitudTests
 {
     [Fact]
+    public void EsquemaVigente_RechazaEstadoRetirado_RF02()
+    {
+        var directorioProyecto = EncontrarDirectorioProyecto();
+        using var conexion = new SqliteConnection("Data Source=:memory:");
+        conexion.Open();
+        EjecutarArchivo(conexion, Path.Combine(directorioProyecto, "db", "schema.sql"));
+        EjecutarArchivo(conexion, Path.Combine(directorioProyecto, "db", "seed.sql"));
+
+        using (var comando = conexion.CreateCommand())
+        {
+            comando.CommandText = "SELECT COUNT(*) FROM solicitudes_firma WHERE migrado_desde = 'ESPERANDO_CERTIFICADO';";
+            Assert.Equal(250L, (long)comando.ExecuteScalar()!);
+        }
+
+        Assert.Throws<SqliteException>(() => Ejecutar(conexion, """
+            INSERT INTO solicitudes_firma
+                (id, documento_id, firmante_email, creada_en, estado)
+            VALUES
+                (1, 'DOC-TEST', 'test@example.com', '2026-11-11T00:00:00-05:00', 'ESPERANDO_CERTIFICADO');
+            """));
+    }
+
+    [Fact]
     public void MigracionYRollback_ConservanDatosYRestauranEstados_RF08()
     {
         var directorioProyecto = EncontrarDirectorioProyecto();
@@ -20,8 +43,13 @@ public class MigracionEstadoSolicitudTests
         {
             using var conexion = new SqliteConnection(cadenaConexion);
             conexion.Open();
-            EjecutarArchivo(conexion, Path.Combine(directorioProyecto, "db", "schema.sql"));
+            EjecutarArchivo(conexion, Path.Combine(directorioProyecto, "db", "migrations", "001_inicial.sql"));
             EjecutarArchivo(conexion, Path.Combine(directorioProyecto, "db", "seed.sql"));
+            Ejecutar(conexion, """
+                UPDATE solicitudes_firma
+                SET estado = 'ESPERANDO_CERTIFICADO', migrado_desde = NULL
+                WHERE migrado_desde = 'ESPERANDO_CERTIFICADO';
+                """);
 
             var originales = LeerSolicitudes(conexion);
             var conteoOriginal = ContarPorEstado(originales);

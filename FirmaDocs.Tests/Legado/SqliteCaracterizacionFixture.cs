@@ -28,8 +28,8 @@ internal sealed class SqliteCaracterizacionFixture : IDisposable
             VALUES
                 (1, 'DOC-001', 'ana@example.com', 1, '2026-11-07T10:00:00-05:00', NULL, 'PENDIENTE', NULL),
                 (2, 'DOC-002', 'ana@example.com', 1, '2026-11-10T10:00:00-05:00', NULL, 'PENDIENTE', NULL),
-                (3, 'DOC-003', 'ana@example.com', 1, '2026-11-11T09:00:00-05:00', NULL, 'ESPERANDO_CERTIFICADO', NULL),
-                (4, 'DOC-004', 'ana@example.com', 1, '2026-11-09T10:00:00-05:00', NULL, 'ESPERANDO_CERTIFICADO', NULL),
+                (3, 'DOC-003', 'ana@example.com', 1, '2026-11-11T09:00:00-05:00', NULL, 'PENDIENTE', 'ESPERANDO_CERTIFICADO'),
+                (4, 'DOC-004', 'ana@example.com', 1, '2026-11-09T10:00:00-05:00', NULL, 'PENDIENTE', 'ESPERANDO_CERTIFICADO'),
                 (5, 'DOC-005', 'ana@example.com', 1, '2026-11-01T08:00:00-05:00', '2026-11-01T12:00:00-05:00', 'FIRMADA', NULL),
                 (6, 'DOC-006', 'bob@example.com', 1, '2026-11-02T08:00:00-05:00', '2026-11-02T20:00:00-05:00', 'RECHAZADA', NULL),
                 (7, 'DOC-007', 'bob@example.com', 1, '2026-11-03T08:00:00-05:00', NULL, 'EXPIRADA', NULL),
