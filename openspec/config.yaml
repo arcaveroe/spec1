@@ -1,4 +1,4 @@
-schema: spec-driven
+schema: specdriven-con-adr
 context: |
   Proyecto: FirmaDocs (firmas digitales con circuitos de firma). Leer siempre AGENTS.md y docs/constitution.md.
   Negocio: docs/negocio.md · Stack: docs/stack.md · Arquitectura: docs/arquitectura.md
