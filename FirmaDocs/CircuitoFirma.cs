@@ -140,7 +140,11 @@ public sealed partial class CircuitoFirma
         RegistrarAprobacion(firmante, instante, hashContenido);
     }
 
-    private void RegistrarAprobacion(Firmante firmante, DateTimeOffset instante, HashContenido? hashContenido)
+    private void RegistrarAprobacion(
+        Firmante firmante,
+        DateTimeOffset instante,
+        HashContenido? hashContenido,
+        Firmante? delegadoEjecutor = null)
     {
         ArgumentNullException.ThrowIfNull(firmante);
 
@@ -149,7 +153,11 @@ public sealed partial class CircuitoFirma
         if (!FirmantesHabilitados.Any(habilitado => habilitado.Id == firmante.Id))
             throw new CircuitoFirmaException($"No es el turno de {firmante.Nombre}.");
 
-        _firmas.Add(new Firma(firmante, Version, instante) { HashContenido = hashContenido });
+        _firmas.Add(new Firma(firmante, Version, instante)
+        {
+            HashContenido = hashContenido,
+            DelegadoEjecutor = delegadoEjecutor
+        });
 
         if (EtapaActual is null)
             Estado = EstadoDocumento.Aprobado;

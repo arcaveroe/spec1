@@ -58,6 +58,34 @@ public sealed partial class CircuitoFirma
         _delegaciones.Add(delegacion);
     }
 
+    /// <summary>Registra la aprobación de un firmante mediante una delegación vigente.</summary>
+    /// <param name="firmanteOriginal">Firmante habilitado que delegó su aprobación.</param>
+    /// <param name="delegado">Persona que ejecuta la aprobación.</param>
+    /// <param name="instante">Momento de la aprobación.</param>
+    /// <exception cref="CircuitoFirmaException">El firmante no está habilitado o no existe una delegación vigente y aplicable.</exception>
+    public void AprobarPorDelegacion(Firmante firmanteOriginal, Firmante delegado, DateTimeOffset instante)
+    {
+        ArgumentNullException.ThrowIfNull(firmanteOriginal);
+        ArgumentNullException.ThrowIfNull(delegado);
+
+        if (Estado != EstadoDocumento.EnCircuito)
+            throw new CircuitoFirmaException("El documento no está en circuito de firma.");
+        if (!FirmantesHabilitados.Any(habilitado => habilitado.Id == firmanteOriginal.Id))
+            throw new CircuitoFirmaException($"No es el turno de {firmanteOriginal.Nombre}.");
+        if (IndiceEtapaActual is not { } indiceEtapa)
+            throw new CircuitoFirmaException("No hay una etapa habilitada para aprobar.");
+
+        var autorizacion = _delegaciones.FirstOrDefault(delegacion =>
+            delegacion.FirmanteOriginal.Id == firmanteOriginal.Id &&
+            delegacion.Delegado.Id == delegado.Id &&
+            delegacion.Etapas.Contains(indiceEtapa) &&
+            delegacion.EstaVigente(instante));
+        if (autorizacion is null)
+            throw new CircuitoFirmaException("El delegado no tiene una autorización vigente para esta etapa.");
+
+        RegistrarAprobacion(firmanteOriginal, instante, null, autorizacion.Delegado);
+    }
+
     private int? IndiceEtapaActual
     {
         get
