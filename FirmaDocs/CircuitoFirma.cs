@@ -159,7 +159,7 @@ public sealed class CircuitoFirma
     /// <param name="firmante">Firmante que rechaza.</param>
     /// <param name="motivo">Motivo del rechazo.</param>
     /// <param name="instante">Momento del rechazo.</param>
-    /// <exception cref="CircuitoFirmaException">El documento no está en circuito, el firmante no está habilitado o el motivo está vacío.</exception>
+    /// <exception cref="CircuitoFirmaException">El documento no está en circuito, el firmante no está habilitado o el motivo no tiene al menos 10 caracteres significativos.</exception>
     public void Rechazar(Firmante firmante, string motivo, DateTimeOffset instante)
     {
         ArgumentNullException.ThrowIfNull(firmante);
@@ -168,8 +168,8 @@ public sealed class CircuitoFirma
             throw new CircuitoFirmaException("Solo se puede rechazar un documento en circuito de firma.");
         if (!FirmantesHabilitados.Any(habilitado => habilitado.Id == firmante.Id))
             throw new CircuitoFirmaException($"No es el turno de {firmante.Nombre}.");
-        if (string.IsNullOrWhiteSpace(motivo))
-            throw new CircuitoFirmaException("El motivo de rechazo es obligatorio.");
+        if (string.IsNullOrWhiteSpace(motivo) || motivo.Trim().Length < 10)
+            throw new CircuitoFirmaException("El motivo de rechazo debe tener al menos 10 caracteres sin contar espacios iniciales ni finales.");
 
         _rechazos.Add(new Rechazo(firmante, motivo, Version, instante));
         Estado = Version == MaxVueltas ? EstadoDocumento.Rechazado : EstadoDocumento.Devuelto;

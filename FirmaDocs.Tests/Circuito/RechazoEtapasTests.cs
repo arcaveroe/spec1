@@ -26,6 +26,19 @@ public class RechazoEtapasTests
     }
 
     [Fact]
+    public void Rechazar_EtapaSecuencialVigente_SinFirmanteEnTurno_RF07()
+    {
+        EtapaFirma[] etapas = [new(ModoEtapaFirma.Secuencial, [Ana, Luis])];
+        var circuito = new CircuitoFirma("DOC-001", "autor", etapas);
+        circuito.Enviar();
+
+        circuito.Rechazar(Ana, "Revisar el documento.", Ahora);
+
+        Assert.Equal(EstadoDocumento.Devuelto, circuito.Estado);
+        Assert.Null(circuito.FirmanteEnTurno);
+    }
+
+    [Fact]
     public void Rechazar_DesdeEtapaPosterior_ReenvioReiniciaPrimeraEtapa_RF07()
     {
         EtapaFirma[] etapas =
