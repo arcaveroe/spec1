@@ -6,7 +6,7 @@ using FirmaDocs.SelloTiempo;
 /// Circuito de firma secuencial: los firmantes aprueban uno tras otro,
 /// en el orden en que se definieron.
 /// </summary>
-public sealed class CircuitoFirma
+public sealed partial class CircuitoFirma
 {
     private readonly IReadOnlyList<Firmante> _firmantes;
     private readonly IReadOnlyList<EtapaFirma> _etapas;
