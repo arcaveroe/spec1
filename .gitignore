@@ -66,6 +66,10 @@ project.fragment.lock.json
 artifacts/
 **/StrykerOutput/
 
+# Generated from OpenSpec Gherkin blocks
+FirmaDocs.Tests/Features/*.feature
+FirmaDocs.Tests/Features/*.feature.cs
+
 # Tye
 .tye/
 

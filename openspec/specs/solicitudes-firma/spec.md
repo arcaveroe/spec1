@@ -8,7 +8,7 @@ Describir los estados admitidos de una solicitud de firma, sus transiciones y el
 
 ### Requirement: RF-01 Estado PENDIENTE
 
-Cuando una solicitud tenga el estado `PENDIENTE`, el sistema DEBERÁ reconocerlo y conservar su representación textual como `PENDIENTE`.
+Cuando una solicitud tenga el estado `PENDIENTE`, el sistema MUST reconocerlo y conservar su representación textual como `PENDIENTE`.
 
 #### Scenario: Leer una solicitud pendiente
 
@@ -18,7 +18,7 @@ Cuando una solicitud tenga el estado `PENDIENTE`, el sistema DEBERÁ reconocerlo
 
 ### Requirement: RF-02 Retirar el estado ESPERANDO_CERTIFICADO
 
-El sistema NO DEBERÁ admitir `ESPERANDO_CERTIFICADO` como estado de una solicitud.
+El sistema MUST NOT admitir `ESPERANDO_CERTIFICADO` como estado de una solicitud.
 
 #### Scenario: Intentar asignar el estado retirado
 
@@ -28,7 +28,7 @@ El sistema NO DEBERÁ admitir `ESPERANDO_CERTIFICADO` como estado de una solicit
 
 ### Requirement: RF-03 Estado FIRMADA
 
-Cuando una solicitud tenga el estado `FIRMADA`, el sistema DEBERÁ reconocerlo y conservar su representación textual como `FIRMADA`.
+Cuando una solicitud tenga el estado `FIRMADA`, el sistema MUST reconocerlo y conservar su representación textual como `FIRMADA`.
 
 #### Scenario: Leer una solicitud firmada
 
@@ -38,7 +38,7 @@ Cuando una solicitud tenga el estado `FIRMADA`, el sistema DEBERÁ reconocerlo y
 
 ### Requirement: RF-04 Estado RECHAZADA
 
-Cuando una solicitud tenga el estado `RECHAZADA`, el sistema DEBERÁ reconocerlo y conservar su representación textual como `RECHAZADA`.
+Cuando una solicitud tenga el estado `RECHAZADA`, el sistema MUST reconocerlo y conservar su representación textual como `RECHAZADA`.
 
 #### Scenario: Leer una solicitud rechazada
 
@@ -48,7 +48,7 @@ Cuando una solicitud tenga el estado `RECHAZADA`, el sistema DEBERÁ reconocerlo
 
 ### Requirement: RF-05 Estado EXPIRADA
 
-Cuando una solicitud tenga el estado `EXPIRADA`, el sistema DEBERÁ reconocerlo y conservar su representación textual como `EXPIRADA`.
+Cuando una solicitud tenga el estado `EXPIRADA`, el sistema MUST reconocerlo y conservar su representación textual como `EXPIRADA`.
 
 #### Scenario: Leer una solicitud expirada
 
@@ -58,7 +58,7 @@ Cuando una solicitud tenga el estado `EXPIRADA`, el sistema DEBERÁ reconocerlo 
 
 ### Requirement: RF-06 Permitir transiciones entre estados admitidos
 
-Cuando se cambie el estado de una solicitud, el sistema DEBERÁ permitir cualquiera de los cuatro estados admitidos (`PENDIENTE`, `FIRMADA`, `RECHAZADA` o `EXPIRADA`) como nuevo estado, sin restringirlo según el estado anterior.
+Cuando se cambie el estado de una solicitud, el sistema MUST permitir cualquiera de los cuatro estados admitidos (`PENDIENTE`, `FIRMADA`, `RECHAZADA` o `EXPIRADA`) como nuevo estado, sin restringirlo según el estado anterior.
 
 #### Scenario: Cambiar entre estados admitidos
 
@@ -68,7 +68,7 @@ Cuando se cambie el estado de una solicitud, el sistema DEBERÁ permitir cualqui
 
 ### Requirement: RF-07 Registrar la resolución según el nuevo estado
 
-Cuando el nuevo estado sea `FIRMADA`, `RECHAZADA` o `EXPIRADA`, el sistema DEBERÁ asignar a `resuelta_en` el instante recibido para el cambio. Cuando el nuevo estado sea `PENDIENTE`, el sistema NO DEBERÁ modificar `resuelta_en`.
+Cuando el nuevo estado sea `FIRMADA`, `RECHAZADA` o `EXPIRADA`, el sistema MUST asignar a `resuelta_en` el instante recibido para el cambio. Cuando el nuevo estado sea `PENDIENTE`, el sistema MUST NOT modificar `resuelta_en`.
 
 #### Scenario: Cambiar a un estado final
 
@@ -84,7 +84,7 @@ Cuando el nuevo estado sea `FIRMADA`, `RECHAZADA` o `EXPIRADA`, el sistema DEBER
 
 ### Requirement: RF-08 Migrar solicitudes existentes
 
-Al migrar solicitudes con estado `ESPERANDO_CERTIFICADO`, el sistema DEBERÁ conservar cada solicitud, cambiar su estado a `PENDIENTE` y registrar `ESPERANDO_CERTIFICADO` como su estado de origen en `migrado_desde`.
+Al migrar solicitudes con estado `ESPERANDO_CERTIFICADO`, el sistema MUST conservar cada solicitud, cambiar su estado a `PENDIENTE` y registrar `ESPERANDO_CERTIFICADO` como su estado de origen en `migrado_desde`.
 
 #### Scenario: Migrar solicitudes que esperan certificado
 
@@ -94,7 +94,7 @@ Al migrar solicitudes con estado `ESPERANDO_CERTIFICADO`, el sistema DEBERÁ con
 
 ### Requirement: RF-09 Incluir solicitudes pendientes en la bandeja
 
-La bandeja del firmante DEBERÁ clasificar las solicitudes migradas a `PENDIENTE` en `PorFirmar` y NO DEBERÁ mostrarlas en una categoría separada de espera por certificado.
+La bandeja del firmante MUST clasificar las solicitudes migradas a `PENDIENTE` en `PorFirmar` y MUST NOT mostrarlas en una categoría separada de espera por certificado.
 
 #### Scenario: Consultar la bandeja tras la migración
 
@@ -104,7 +104,7 @@ La bandeja del firmante DEBERÁ clasificar las solicitudes migradas a `PENDIENTE
 
 ### Requirement: RF-10 No enviar recordatorios de certificado
 
-El sistema NO DEBERÁ enviar el aviso «Instala tu certificado digital» asociado al estado `ESPERANDO_CERTIFICADO`.
+El sistema MUST NOT enviar el aviso «Instala tu certificado digital» asociado al estado `ESPERANDO_CERTIFICADO`.
 
 #### Scenario: Procesar recordatorios tras retirar el estado
 
@@ -114,7 +114,7 @@ El sistema NO DEBERÁ enviar el aviso «Instala tu certificado digital» asociad
 
 ### Requirement: RF-11 Incluir solicitudes migradas en el SLA
 
-El reporte de SLA DEBERÁ incluir las solicitudes migradas a `PENDIENTE` y calcular su duración desde su instante original de creación (`creada_en`).
+El reporte de SLA MUST incluir las solicitudes migradas a `PENDIENTE` y calcular su duración desde su instante original de creación (`creada_en`).
 
 #### Scenario: Calcular el SLA de una solicitud migrada
 

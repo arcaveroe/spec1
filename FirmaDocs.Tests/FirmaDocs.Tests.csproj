@@ -29,7 +29,7 @@
     <ProjectReference Include="..\FirmaDocs\FirmaDocs.csproj" />
   </ItemGroup>
 
-  <Target Name="ExtractOpenSpecFeatures" BeforeTargets="Restore;BeforeBuild">
+  <Target Name="ExtractGherkinFeatures" BeforeTargets="Restore;BeforeBuild">
     <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\tools\extract-features.ps1&quot;" />
   </Target>
 
