@@ -5,6 +5,7 @@ CREATE TABLE solicitudes_firma (
   firmante_email TEXT NOT NULL,
   vuelta INTEGER NOT NULL DEFAULT 1,
   creada_en TEXT NOT NULL,          -- ISO 8601, p. ej. 2026-05-04T09:30:00-05:00
+  vence_en TEXT NULL,
   resuelta_en TEXT NULL,
   estado TEXT NOT NULL CHECK (estado IN ('PENDIENTE','FIRMADA','RECHAZADA','EXPIRADA')),
   migrado_desde TEXT NULL

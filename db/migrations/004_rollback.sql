@@ -1,0 +1,5 @@
+BEGIN IMMEDIATE;
+
+ALTER TABLE solicitudes_firma DROP COLUMN vence_en;
+
+COMMIT;
