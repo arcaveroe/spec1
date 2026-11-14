@@ -45,6 +45,48 @@ public class EtapaFirmaTests
     }
 
     [Fact]
+    public void Constructor_ModoNoAdmitido_ExplicaMotivo_RF01()
+    {
+        var excepcion = Assert.Throws<CircuitoFirmaException>(() =>
+            _ = new EtapaFirma((ModoEtapaFirma)99, [Ana]));
+
+        Assert.Equal("El modo de la etapa no está admitido.", excepcion.Message);
+    }
+
+    [Fact]
+    public void Constructor_FirmantesNulo_LanzaArgumentNullException_RF01()
+    {
+        var excepcion = Assert.Throws<ArgumentNullException>(() =>
+            _ = new EtapaFirma(ModoEtapaFirma.Secuencial, null!));
+
+        Assert.Equal("firmantes", excepcion.ParamName);
+    }
+
+    [Fact]
+    public void Constructor_ListaConFirmanteNulo_LanzaExcepcionConMotivo_RF01()
+    {
+        Firmante[] firmantes = [Ana, null!];
+
+        var excepcion = Assert.Throws<CircuitoFirmaException>(() =>
+            _ = new EtapaFirma(ModoEtapaFirma.Secuencial, firmantes));
+
+        Assert.Equal("La etapa no puede contener firmantes nulos.", excepcion.Message);
+    }
+
+    [Fact]
+    public void Constructor_MasDeCincoFirmantes_ExplicaLimite_RF01()
+    {
+        var firmantes = Enumerable.Range(1, 6)
+            .Select(i => new Firmante($"firmante-{i}", $"Firmante {i}"))
+            .ToArray();
+
+        var excepcion = Assert.Throws<CircuitoFirmaException>(() =>
+            _ = new EtapaFirma(ModoEtapaFirma.Secuencial, firmantes));
+
+        Assert.Equal("Cada etapa debe tener entre uno y cinco firmantes.", excepcion.Message);
+    }
+
+    [Fact]
     public void Constructor_CeroOMasDeCincoEtapas_LanzaExcepcion_RF01()
     {
         var sinEtapas = Array.Empty<EtapaFirma>();

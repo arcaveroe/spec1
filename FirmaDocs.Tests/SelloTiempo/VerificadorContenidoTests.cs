@@ -50,4 +50,15 @@ public sealed class VerificadorContenidoTests
         Assert.Null(resultado.HashReferencia);
         Assert.Null(resultado.Motivo);
     }
+
+    [Fact]
+    public void Verificar_FirmaNula_LanzaArgumentNullException_RF03()
+    {
+        var verificador = new VerificadorContenido();
+
+        var excepcion = Assert.Throws<ArgumentNullException>(() =>
+            verificador.Verificar(null!, "Contrato v2"));
+
+        Assert.Equal("firma", excepcion.ParamName);
+    }
 }

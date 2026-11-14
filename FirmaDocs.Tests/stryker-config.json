@@ -2,6 +2,6 @@
   "stryker-config": {
     "reporters": ["html", "progress"],
     "mutate": ["**/Circuito/**/*.cs", "**/Legado/**/*.cs", "**/SelloTiempo/**/*.cs", "!**/*.feature.cs"],
-    "thresholds": { "high": 90, "low": 70, "break": 0 }
+    "thresholds": { "high": 90, "low": 80, "break": 80 }
   }
 }

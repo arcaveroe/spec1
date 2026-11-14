@@ -104,6 +104,50 @@ public sealed class AprobacionSelladaTests
         Assert.Equal(Ana, circuito.FirmanteEnTurno);
     }
 
+    [Theory]
+    [InlineData("TSA_OCUPADA", "TSA_OCUPADA")]
+    [InlineData("", "TSA_NO_DISPONIBLE")]
+    [InlineData(" ", "TSA_NO_DISPONIBLE")]
+    [InlineData(null, "TSA_NO_DISPONIBLE")]
+    public void Aprobar_TsaFalla_ConservaMotivoONoDisponible_RF02(
+        string? motivoTsa,
+        string motivoEsperado)
+    {
+        var circuito = CircuitoEnviado();
+        var tsa = Substitute.For<ITsa>();
+        tsa.Sellar(Arg.Any<HashContenido>())
+            .Returns(new ResultadoTsa(false, null, motivoTsa));
+        var servicio = new ServicioAprobacionSellada();
+
+        var resultado = servicio.Aprobar(circuito, Ana, "Contrato v2", Instante, tsa);
+
+        Assert.False(resultado.Exito);
+        Assert.Equal(motivoEsperado, resultado.Motivo);
+        Assert.Empty(circuito.Firmas);
+    }
+
+    [Fact]
+    public void Aprobar_ArgumentoNulo_FallaAntesDeSolicitarSello_RF01()
+    {
+        var servicio = new ServicioAprobacionSellada();
+        var tsa = TsaExito("TSA-000123");
+
+        var circuitoNulo = Assert.Throws<ArgumentNullException>(() =>
+            servicio.Aprobar(null!, Ana, "Contrato v2", Instante, tsa));
+        Assert.Equal("circuito", circuitoNulo.ParamName);
+        tsa.DidNotReceive().Sellar(Arg.Any<HashContenido>());
+
+        var circuito = CircuitoEnviado();
+        var firmanteNulo = Assert.Throws<ArgumentNullException>(() =>
+            servicio.Aprobar(circuito, null!, "Contrato v2", Instante, tsa));
+        Assert.Equal("firmante", firmanteNulo.ParamName);
+        tsa.DidNotReceive().Sellar(Arg.Any<HashContenido>());
+
+        var tsaNula = Assert.Throws<ArgumentNullException>(() =>
+            servicio.Aprobar(circuito, Ana, "Contrato v2", Instante, null!));
+        Assert.Equal("tsa", tsaNula.ParamName);
+    }
+
     private static CircuitoFirma CircuitoEnviado()
     {
         var circuito = new CircuitoFirma("DOC-001", "autor", [Ana, Luis]);
