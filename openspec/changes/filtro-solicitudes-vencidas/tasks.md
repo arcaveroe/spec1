@@ -6,6 +6,6 @@
 ## 2. Persistencia y consulta de solo lectura
 
 - [x] 2.1 Agregar `vence_en` nullable y migración segura para registros legados, citando RF-FSV04.
-- [ ] 2.2 Implementar la consulta paginada de solo lectura con instante explícito, citando RF-FSV01 y RF-FSV03.
+- [x] 2.2 Implementar la consulta paginada de solo lectura con instante explícito, citando RF-FSV01 y RF-FSV03.
 - [ ] 2.3 Exponer el endpoint HTTP y verificar que no modifica solicitudes ni historial, citando RF-FSV01 y RF-FSV02.
 - [ ] 2.4 Ejecutar `dotnet test` y `dotnet build` de la solución.
