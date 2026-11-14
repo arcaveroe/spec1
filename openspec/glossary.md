@@ -32,6 +32,18 @@
 - **Ejemplo:** queda registrada la firma de Ana en la versión 2 del documento.
 - **Cita:** `docs/negocio.md`, definición «Firma»; `openspec/specs/etapas-paralelas/spec.md`, RF-08.
 
+### Hash de contenido
+- **Definición operativa:** valor calculado a partir de los bytes UTF-8 del contenido de una versión y usado para comparar ese contenido durante una verificación.
+- **Sinónimos prohibidos:** no usar «Firma» para nombrar el hash.
+- **Ejemplo:** la verificación compara el hash guardado con el calculado a partir del contenido actual de la misma versión.
+- **Cita:** `openspec/changes/sello-tiempo/proposal.md`, What Changes, primer y tercer puntos.
+
+### TSA
+- **Definición operativa:** servicio de sellado de tiempo cuyo éxito es necesario para registrar la Firma.
+- **Sinónimos prohibidos:** no usar «instante de la Firma» para nombrar el servicio o su resultado.
+- **Ejemplo:** si la TSA falla, la Firma no se registra y el turno permanece en el mismo firmante.
+- **Cita:** `openspec/changes/sello-tiempo/proposal.md`, What Changes, primer y segundo puntos.
+
 ### Rechazo
 - **Definición operativa:** devolución del documento registrada con firmante, motivo, versión e instante.
 - **Sinónimos prohibidos:** no usar «firma» para referirse al registro de rechazo.
