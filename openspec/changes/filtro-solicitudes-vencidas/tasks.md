@@ -1,7 +1,7 @@
 ## 1. Contrato de consulta
 
 - [x] 1.1 Acordar ruta, parámetros, respuesta y límite temporal, citando RF-FSV01 y RF-FSV03.
-- [ ] 1.2 Añadir pruebas de solicitudes vencidas, vigentes, límite exacto y vencimientos nulos, citando RF-FSV01.
+- [x] 1.2 Añadir pruebas de solicitudes vencidas, vigentes, límite exacto y vencimientos nulos, citando RF-FSV01.
 
 ## 2. Persistencia y consulta de solo lectura
 
