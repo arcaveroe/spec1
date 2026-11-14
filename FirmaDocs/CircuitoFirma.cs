@@ -1,5 +1,7 @@
 ﻿namespace FirmaDocs;
 
+using FirmaDocs.SelloTiempo;
+
 /// <summary>
 /// Circuito de firma secuencial: los firmantes aprueban uno tras otro,
 /// en el orden en que se definieron.
@@ -140,6 +142,11 @@ public sealed class CircuitoFirma
 
         if (EtapaActual is null)
             Estado = EstadoDocumento.Aprobado;
+    }
+
+    internal void AprobarSellada(Firmante firmante, DateTimeOffset instante, HashContenido hashContenido)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>Registra el rechazo de un firmante habilitado.</summary>
