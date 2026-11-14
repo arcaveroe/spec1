@@ -8,7 +8,7 @@ namespace FirmaDocs.Legado;
 public class SolicitudFirmaRepository
 {
     private const string Columnas =
-        "id, documento_id, firmante_email, vuelta, creada_en, resuelta_en, estado, migrado_desde";
+        "id, documento_id, firmante_email, vuelta, creada_en, resuelta_en, estado, migrado_desde, vence_en";
 
     private readonly string _connectionString;
 
@@ -42,6 +42,62 @@ public class SolicitudFirmaRepository
         cmd.CommandText = $"SELECT {Columnas} FROM solicitudes_firma WHERE firmante_email = $email ORDER BY creada_en";
         cmd.Parameters.AddWithValue("$email", email);
         return Leer(cmd);
+    }
+
+    /// <summary>
+    /// Lista por página las solicitudes cuyo vencimiento es anterior al instante recibido.
+    /// </summary>
+    /// <param name="instante">Instante de referencia de la consulta.</param>
+    /// <param name="pagina">Número de página, empezando en uno.</param>
+    /// <param name="tamanoPagina">Cantidad máxima de resultados por página.</param>
+    /// <param name="total">Cantidad total de solicitudes que cumplen el filtro.</param>
+    /// <returns>Solicitudes ordenadas por vencimiento e identificador ascendente.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">La página o su tamaño no son positivos.</exception>
+    public List<SolicitudFirma> ListarVencidas(
+        DateTimeOffset instante,
+        int pagina,
+        int tamanoPagina,
+        out long total)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(pagina, 1);
+        ArgumentOutOfRangeException.ThrowIfLessThan(tamanoPagina, 1);
+        var offset = (long)(pagina - 1) * tamanoPagina;
+
+        using var conn = new SqliteConnection(_connectionString);
+        conn.Open();
+        using var transaction = conn.BeginTransaction(deferred: true);
+
+        using var countCmd = conn.CreateCommand();
+        countCmd.Transaction = transaction;
+        countCmd.CommandText = """
+            SELECT COUNT(*)
+            FROM solicitudes_firma
+            WHERE vence_en IS NOT NULL
+              AND julianday(vence_en) < julianday($instante)
+            """;
+        countCmd.Parameters.AddWithValue(
+            "$instante",
+            instante.ToString("O", CultureInfo.InvariantCulture));
+        total = (long)(countCmd.ExecuteScalar() ?? 0L);
+
+        using var cmd = conn.CreateCommand();
+        cmd.Transaction = transaction;
+        cmd.CommandText = $"""
+            SELECT {Columnas}
+            FROM solicitudes_firma
+            WHERE vence_en IS NOT NULL
+              AND julianday(vence_en) < julianday($instante)
+            ORDER BY julianday(vence_en), id
+            LIMIT $tamanoPagina OFFSET $offset
+            """;
+        cmd.Parameters.AddWithValue(
+            "$instante",
+            instante.ToString("O", CultureInfo.InvariantCulture));
+        cmd.Parameters.AddWithValue("$tamanoPagina", tamanoPagina);
+        cmd.Parameters.AddWithValue("$offset", offset);
+        var solicitudes = Leer(cmd);
+        transaction.Commit();
+        return solicitudes;
     }
 
     public void CambiarEstado(int id, EstadoSolicitud nuevo, DateTimeOffset instante)
@@ -93,7 +149,12 @@ public class SolicitudFirmaRepository
                 DateTimeOffset.Parse(reader.GetString(4), CultureInfo.InvariantCulture),
                 reader.IsDBNull(5) ? null : DateTimeOffset.Parse(reader.GetString(5), CultureInfo.InvariantCulture),
                 EstadoSolicitudTexto.DesdeTexto(reader.GetString(6)),
-                reader.IsDBNull(7) ? null : reader.GetString(7)));
+                reader.IsDBNull(7) ? null : reader.GetString(7))
+            {
+                VenceEn = reader.IsDBNull(8)
+                    ? null
+                    : DateTimeOffset.Parse(reader.GetString(8), CultureInfo.InvariantCulture)
+            });
         }
         return lista;
     }

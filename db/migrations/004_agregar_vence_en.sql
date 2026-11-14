@@ -1,0 +1,5 @@
+BEGIN IMMEDIATE;
+
+ALTER TABLE solicitudes_firma ADD COLUMN vence_en TEXT NULL;
+
+COMMIT;

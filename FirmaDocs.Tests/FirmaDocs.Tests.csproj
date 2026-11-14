@@ -21,6 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FirmaDocs.Api\FirmaDocs.Api.csproj" />
     <ProjectReference Include="..\FirmaDocs\FirmaDocs.csproj" />
   </ItemGroup>
 

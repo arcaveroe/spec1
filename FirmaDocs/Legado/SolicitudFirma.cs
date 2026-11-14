@@ -9,4 +9,10 @@ public record SolicitudFirma(
     DateTimeOffset CreadaEn,
     DateTimeOffset? ResueltaEn,
     EstadoSolicitud Estado,
-    string? MigradoDesde);
+    string? MigradoDesde)
+{
+    /// <summary>
+    /// Obtiene el instante en que vence la solicitud, si fue informado.
+    /// </summary>
+    public DateTimeOffset? VenceEn { get; init; }
+}
