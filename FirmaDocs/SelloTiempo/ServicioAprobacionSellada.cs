@@ -10,7 +10,6 @@ public sealed class ServicioAprobacionSellada
     /// <param name="instante">Instante de la aprobación.</param>
     /// <param name="tsa">Autoridad a la que se solicita el sellado.</param>
     /// <returns>Resultado de la aprobación sellada.</returns>
-    /// <exception cref="NotImplementedException">La coordinación está pendiente de implementación.</exception>
     public ResultadoAprobacionSellada Aprobar(
         CircuitoFirma circuito,
         Firmante firmante,
@@ -18,6 +17,22 @@ public sealed class ServicioAprobacionSellada
         DateTimeOffset instante,
         ITsa tsa)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(circuito);
+        ArgumentNullException.ThrowIfNull(firmante);
+        ArgumentNullException.ThrowIfNull(contenido);
+        ArgumentNullException.ThrowIfNull(tsa);
+
+        var hash = HashContenido.Calcular(contenido);
+        var resultadoTsa = tsa.Sellar(hash);
+        if (!resultadoTsa.Exito || string.IsNullOrWhiteSpace(resultadoTsa.Sello))
+        {
+            var motivo = string.IsNullOrWhiteSpace(resultadoTsa.Motivo)
+                ? "TSA_NO_DISPONIBLE"
+                : resultadoTsa.Motivo;
+            return new ResultadoAprobacionSellada(false, hash, null, motivo);
+        }
+
+        circuito.AprobarSellada(firmante, instante, hash);
+        return new ResultadoAprobacionSellada(true, hash, resultadoTsa.Sello, null);
     }
 }
