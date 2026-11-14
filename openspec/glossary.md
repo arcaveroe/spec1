@@ -68,6 +68,12 @@
 - **Ejemplo:** al cambiar una solicitud a `FIRMADA`, se registra el instante de resolución recibido.
 - **Cita:** `openspec/specs/solicitudes-firma/spec.md`, RF-01 a RF-07.
 
+### Declaración de firma externa
+- **Definición operativa:** registro que declara que una firma ocurrió fuera del sistema, conserva su origen y no demuestra por sí mismo la validez de una Firma ni crea una Firma o una Solicitud de firma.
+- **Sinónimos prohibidos:** no usar «firma» ni «solicitud de firma» para nombrar este registro.
+- **Ejemplo:** el registro importado conserva el origen de la declaración de firma externa.
+- **Cita:** `openspec/changes/importar-firmas-externas/proposal.md`, Why y What Changes.
+
 ### Anti-Corruption Layer (ACL; capa anticorrupción)
 - **Definición operativa:** capa que traduce datos externos al modelo del dominio sin contaminarlo.
 - **Sinónimos prohibidos:** no sustituir el término por «integración» cuando se alude específicamente a esta capa de traducción.
