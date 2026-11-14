@@ -4,7 +4,7 @@
 
 ### Requirement: RF-09 Registrar la Firma solo tras confirmación de la TSA
 
-El sistema DEBERÁ solicitar a la TSA la confirmación del hash del contenido antes de registrar una Firma en la etapa actual. Si la TSA no responde, el sistema NO DEBERÁ registrar la Firma ni avanzar el turno.
+El sistema MUST solicitar a la TSA la confirmación del hash del contenido antes de registrar una Firma en la etapa actual. Si la TSA no responde, el sistema MUST NOT registrar la Firma ni avanzar el turno.
 
 #### Scenario: TSA no disponible durante una aprobación
 

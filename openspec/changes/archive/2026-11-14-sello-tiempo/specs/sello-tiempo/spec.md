@@ -8,7 +8,7 @@ Definir cómo se asocia el hash de contenido de una versión con una Firma tras 
 
 ### Requirement: RF-01 Registrar el hash de contenido confirmado por la TSA
 
-El sistema DEBERÁ calcular el hash SHA-256 de los bytes UTF-8 del contenido de la versión y solicitar su sellado a una TSA antes de registrar la Firma. Solo DEBERÁ registrar la Firma si la TSA confirma el hash solicitado, y DEBERÁ asociar ese hash con la Firma.
+El sistema MUST calcular el hash SHA-256 de los bytes UTF-8 del contenido de la versión y solicitar su sellado a una TSA antes de registrar la Firma. Solo MUST registrar la Firma si la TSA confirma el hash solicitado, y MUST asociar ese hash con la Firma.
 
 #### Scenario: La TSA confirma el hash del contenido
 
@@ -28,7 +28,7 @@ Característica: Registrar una Firma con hash de contenido confirmado por TSA
 
 ### Requirement: RF-02 No registrar la Firma si la TSA no responde
 
-Si la TSA no responde, el sistema NO DEBERÁ registrar la Firma ni avanzar el turno, y DEBERÁ informar el motivo `TSA_NO_DISPONIBLE`.
+Si la TSA no responde, el sistema MUST NOT registrar la Firma ni avanzar el turno, y MUST informar el motivo `TSA_NO_DISPONIBLE`.
 
 #### Scenario: La TSA no responde durante el registro
 
@@ -48,7 +48,7 @@ Característica: Conservar el circuito si la TSA no responde
 
 ### Requirement: RF-03 Verificar el contenido de la versión asociada a una Firma
 
-El sistema DEBERÁ verificar el contenido calculando su hash SHA-256 sobre los bytes UTF-8 y comparándolo con el hash asociado a la Firma de esa misma versión. Si los hashes difieren, DEBERÁ informar el motivo `DOCUMENTO_ALTERADO`.
+El sistema MUST verificar el contenido calculando su hash SHA-256 sobre los bytes UTF-8 y comparándolo con el hash asociado a la Firma de esa misma versión. Si los hashes difieren, MUST informar el motivo `DOCUMENTO_ALTERADO`.
 
 #### Scenario: El contenido de la versión coincide con el hash de la Firma
 

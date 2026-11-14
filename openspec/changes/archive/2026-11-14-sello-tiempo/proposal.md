@@ -6,10 +6,10 @@ Se necesita detectar si cambió el contenido de una versión después de registr
 
 ## What Changes
 
-- Calcular el hash del contenido de la versión aprobada a partir de sus bytes UTF-8 y solicitar su sellado a una TSA antes de registrar la Firma.
-- Si la TSA falla, no registrar la Firma y mantener el turno en el mismo firmante.
-- Permitir verificar una Firma comparando el hash guardado con el hash calculado a partir del contenido actual de esa versión.
-- Mantener sin cambios la firma pública `Aprobar(Firmante, DateTimeOffset)`. El diseño decidirá si la extensión requiere una sobrecarga o un servicio nuevo.
+- El sistema MUST calcular el hash del contenido de la versión aprobada a partir de sus bytes UTF-8 y solicitar su sellado a una TSA antes de registrar la Firma.
+- Si la TSA falla, el sistema MUST no registrar la Firma y MUST mantener el turno en el mismo firmante.
+- El sistema MUST permitir verificar una Firma comparando el hash guardado con el hash calculado a partir del contenido actual de esa versión.
+- El sistema MUST mantener sin cambios la firma pública `Aprobar(Firmante, DateTimeOffset)`. El diseño decidirá si la extensión requiere una sobrecarga o un servicio nuevo.
 
 ## Capabilities
 
