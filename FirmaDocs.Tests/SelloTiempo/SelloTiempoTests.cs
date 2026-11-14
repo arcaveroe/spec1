@@ -98,6 +98,39 @@ public sealed class SelloTiempoTests
     }
 
     [Fact]
+    public void Aprobar_SinEnviarTsaConfirma_LanzaSinMutarCircuito_RF09()
+    {
+        var circuito = new CircuitoFirma("DOC-001", "autor", [Ana, Luis]);
+        var tsa = Substitute.For<ITsa>();
+        tsa.Sellar(Arg.Any<HashContenido>())
+            .Returns(new ResultadoTsa(true, "TSA-000123", null));
+        var servicio = new ServicioAprobacionSellada();
+
+        Assert.Throws<CircuitoFirmaException>(() =>
+            servicio.Aprobar(circuito, Ana, "Contrato v2", Instante, tsa));
+
+        Assert.Empty(circuito.Firmas);
+        Assert.Equal(EstadoDocumento.Borrador, circuito.Estado);
+    }
+
+    [Fact]
+    public void Aprobar_TsaConfirmaSinSello_NoRegistraFirma_RF02()
+    {
+        var circuito = CircuitoEnviado();
+        var tsa = Substitute.For<ITsa>();
+        tsa.Sellar(Arg.Any<HashContenido>())
+            .Returns(new ResultadoTsa(true, null, null));
+        var servicio = new ServicioAprobacionSellada();
+
+        var resultado = servicio.Aprobar(circuito, Ana, "Contrato v2", Instante, tsa);
+
+        Assert.False(resultado.Exito);
+        Assert.Equal("TSA_NO_DISPONIBLE", resultado.Motivo);
+        Assert.Empty(circuito.Firmas);
+        Assert.Equal(Ana, circuito.FirmanteEnTurno);
+    }
+
+    [Fact]
     public void Verificar_ContenidoCoincide_DevuelveHashesYEstadoCoincidente_RF03()
     {
         var hash = HashContenido.Calcular("Contrato v2");

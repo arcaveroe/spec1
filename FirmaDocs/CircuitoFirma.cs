@@ -131,6 +131,17 @@ public sealed class CircuitoFirma
     /// <exception cref="CircuitoFirmaException">El documento no está en circuito o el firmante no está habilitado.</exception>
     public void Aprobar(Firmante firmante, DateTimeOffset instante)
     {
+        RegistrarAprobacion(firmante, instante, null);
+    }
+
+    internal void AprobarSellada(Firmante firmante, DateTimeOffset instante, HashContenido hashContenido)
+    {
+        ArgumentNullException.ThrowIfNull(hashContenido);
+        RegistrarAprobacion(firmante, instante, hashContenido);
+    }
+
+    private void RegistrarAprobacion(Firmante firmante, DateTimeOffset instante, HashContenido? hashContenido)
+    {
         ArgumentNullException.ThrowIfNull(firmante);
 
         if (Estado != EstadoDocumento.EnCircuito)
@@ -138,15 +149,10 @@ public sealed class CircuitoFirma
         if (!FirmantesHabilitados.Any(habilitado => habilitado.Id == firmante.Id))
             throw new CircuitoFirmaException($"No es el turno de {firmante.Nombre}.");
 
-        _firmas.Add(new Firma(firmante, Version, instante));
+        _firmas.Add(new Firma(firmante, Version, instante) { HashContenido = hashContenido });
 
         if (EtapaActual is null)
             Estado = EstadoDocumento.Aprobado;
-    }
-
-    internal void AprobarSellada(Firmante firmante, DateTimeOffset instante, HashContenido hashContenido)
-    {
-        throw new NotImplementedException();
     }
 
     /// <summary>Registra el rechazo de un firmante habilitado.</summary>
